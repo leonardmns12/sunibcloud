@@ -1,0 +1,4 @@
+include ':owncloud'
+rootProject.name='My Application'
+include ':app'
+project(':owncloud').projectDir = new File('nextcloud-android-library')

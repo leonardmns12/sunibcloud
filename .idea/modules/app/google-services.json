@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "47762428716",
+    "firebase_url": "https://android-studio-learn.firebaseio.com",
+    "project_id": "android-studio-learn",
+    "storage_bucket": "android-studio-learn.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:47762428716:android:9f4497b1f3c2c123ff5289",
+        "android_client_info": {
+          "package_name": "com.helloworld.myapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "47762428716-lpbol6f6svdgskmd6hdi3v0e009r6f20.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.helloworld.myapplication",
+            "certificate_hash": "5933200af6decaa0fbcea515ed6cf4e93339044d"
+          }
+        },
+        {
+          "client_id": "47762428716-qapat8rs8o9e63h7qc4j418vucj93rop.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDGI1LZ1Vz_7QL5V06lD_G7psBGjkaFVmA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "47762428716-qapat8rs8o9e63h7qc4j418vucj93rop.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

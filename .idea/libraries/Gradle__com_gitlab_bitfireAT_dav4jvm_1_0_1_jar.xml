@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: com.gitlab.bitfireAT:dav4jvm:1.0.1@jar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.gitlab.bitfireAT/dav4jvm/1.0.1/9844e1e79ee83793439053e54b53635370e6ff34/dav4jvm-1.0.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.gitlab.bitfireAT/dav4jvm/1.0.1/f2772ec39870d807139462f50d47a1dffc27c99f/dav4jvm-1.0.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

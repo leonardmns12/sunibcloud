@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/actionMenu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/downloadBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp">
+
+            <ImageView
+                android:id="@+id/imageView3"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginRight="5dp"
+                app:srcCompat="@drawable/ic_baseline_archive_24"
+                tools:ignore="VectorDrawableCompat" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/reguler"
+                android:text="@string/download"
+                android:textColor="@color/bgred" />
+
+        </LinearLayout>
+
+        <LinearLayout
+        android:id="@+id/copyBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        >
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            app:srcCompat="@drawable/ic_baseline_file_copy_24"
+            tools:ignore="VectorDrawableCompat"
+            android:layout_marginRight="5dp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/copy"
+            android:fontFamily="@font/reguler"
+            android:textColor="@color/bgred"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/moveBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        >
+
+        <ImageView
+            android:id="@+id/imageView5"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            app:srcCompat="@drawable/ic_baseline_reply_24"
+            tools:ignore="VectorDrawableCompat"
+            android:layout_marginRight="5dp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/move"
+            android:fontFamily="@font/reguler"
+            android:textColor="@color/bgred"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/renameBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        >
+
+        <ImageView
+            android:id="@+id/imageView7"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            app:srcCompat="@drawable/ic_baseline_edit_24"
+            tools:ignore="VectorDrawableCompat"
+            android:layout_marginRight="5dp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/rename"
+            android:fontFamily="@font/reguler"
+            android:textColor="@color/bgred"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/deleteBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        >
+
+        <ImageView
+            android:id="@+id/imageView4"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            app:srcCompat="@drawable/ic_baseline_delete_24"
+            tools:ignore="VectorDrawableCompat"
+            android:layout_marginRight="5dp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/delete"
+            android:fontFamily="@font/reguler"
+            android:textColor="@color/red"
+            />
+
+    </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/renameMenu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="10dp"
+        android:visibility="gone"
+        >
+
+        <EditText
+            android:id="@+id/rename"
+            android:layout_width="200dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/input_field"
+            android:fontFamily="@font/reguler"
+            android:textSize="12dp"
+            android:hint="Filename" />
+
+        <Button
+            android:id="@+id/submitRename"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/rename"
+            android:textAllCaps="false"
+            android:fontFamily="@font/reguler"
+            android:background="@drawable/action_button"
+            android:textColor="@color/white"
+            />
+
+
+    </LinearLayout>
+
+
+
+</RelativeLayout>

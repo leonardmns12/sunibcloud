@@ -1,0 +1,40 @@
+buildscript {
+    repositories {
+        google() // For Gradle 4.0+
+        maven { url 'https://maven.google.com' } // For Gradle < 4.0
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.6.2'
+    }
+}
+
+apply plugin: 'com.android.application'
+
+repositories {
+    google()
+    jcenter()
+}
+
+dependencies {
+    implementation project(':')
+}
+
+android {
+    compileSdkVersion 28
+
+    lintOptions {
+        abortOnError false
+    }
+
+    packagingOptions {
+        exclude 'META-INF/LICENSE.txt'
+    }
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion 28
+    }
+    dependencies {
+        implementation 'com.github.nextcloud:android-library:2.3.1'
+    }
+}
