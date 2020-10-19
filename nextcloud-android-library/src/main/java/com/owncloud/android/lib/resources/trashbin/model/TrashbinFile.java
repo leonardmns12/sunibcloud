@@ -32,6 +32,7 @@ import com.owncloud.android.lib.resources.files.FileUtils;
 import com.owncloud.android.lib.resources.files.model.ServerFileInterface;
 
 import java.io.Serializable;
+import java.util.Calendar;
 
 import androidx.annotation.VisibleForTesting;
 import lombok.Getter;
@@ -77,6 +78,8 @@ public class TrashbinFile implements Parcelable, Serializable, ServerFileInterfa
     public boolean isHidden() {
         return getFileName().startsWith(".");
     }
+
+    public Long getTimestamp() {return deletionTimestamp;}
 
     @Override
     public boolean isFavorite() {

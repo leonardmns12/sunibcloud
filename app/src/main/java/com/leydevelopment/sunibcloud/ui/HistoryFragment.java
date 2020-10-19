@@ -1,6 +1,6 @@
 //Copyright @Leonardmnss
 //All codes belongs to all vendors and developers
-package com.leydevelopment.sunibcloud;
+package com.leydevelopment.sunibcloud.ui;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -28,6 +28,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import com.leydevelopment.sunibcloud.utils.FileBottomDialog;
+import com.leydevelopment.sunibcloud.R;
+import com.leydevelopment.sunibcloud.adapter.FilesArrayAdapter;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.OwnCloudClientFactory;
 import com.owncloud.android.lib.common.OwnCloudCredentialsFactory;
@@ -41,7 +44,6 @@ import com.owncloud.android.lib.resources.files.MoveFileRemoteOperation;
 import com.owncloud.android.lib.resources.files.ReadFolderRemoteOperation;
 import com.owncloud.android.lib.resources.files.model.RemoteFile;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;

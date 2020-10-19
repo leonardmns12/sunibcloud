@@ -1,4 +1,4 @@
-package com.leydevelopment.sunibcloud;
+package com.leydevelopment.sunibcloud.utils;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -24,6 +24,8 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.leydevelopment.sunibcloud.R;
+import com.leydevelopment.sunibcloud.ui.TaskFragment;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.OwnCloudClientFactory;
 import com.owncloud.android.lib.common.OwnCloudCredentialsFactory;

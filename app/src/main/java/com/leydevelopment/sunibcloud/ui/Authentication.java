@@ -1,4 +1,4 @@
-package com.leydevelopment.sunibcloud;
+package com.leydevelopment.sunibcloud.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,6 +7,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.leydevelopment.sunibcloud.R;
 
 public class Authentication extends AppCompatActivity {
     Button loginBtn;

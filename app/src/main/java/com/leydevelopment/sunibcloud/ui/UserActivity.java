@@ -1,4 +1,4 @@
-package com.leydevelopment.sunibcloud;
+package com.leydevelopment.sunibcloud.ui;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -16,6 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.ybq.android.spinkit.sprite.Sprite;
 import com.github.ybq.android.spinkit.style.ThreeBounce;
+import com.leydevelopment.sunibcloud.R;
+import com.leydevelopment.sunibcloud.adapter.ActivityAdapter;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.OwnCloudClientFactory;
 import com.owncloud.android.lib.common.OwnCloudCredentialsFactory;

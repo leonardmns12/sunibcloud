@@ -1,4 +1,4 @@
-package com.leydevelopment.sunibcloud;
+package com.leydevelopment.sunibcloud.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,6 +23,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.hbb20.CountryCodePicker;
+import com.leydevelopment.sunibcloud.R;
 
 public class Login extends AppCompatActivity {
     private FirebaseAuth mAuth;

@@ -1,4 +1,4 @@
-package com.leydevelopment.sunibcloud;
+package com.leydevelopment.sunibcloud.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.leydevelopment.sunibcloud.R;
 import com.owncloud.android.lib.resources.activities.model.Activity;
 
 import org.ocpsoft.prettytime.PrettyTime;

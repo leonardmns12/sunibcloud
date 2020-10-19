@@ -1,4 +1,4 @@
-package com.leydevelopment.sunibcloud;
+package com.leydevelopment.sunibcloud.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,17 +10,24 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.leydevelopment.sunibcloud.R;
 import com.owncloud.android.lib.resources.trashbin.model.TrashbinFile;
 
+import org.ocpsoft.prettytime.PrettyTime;
+
+import java.util.Date;
 import java.util.List;
 
 public class TrashbinAdapter extends RecyclerView.Adapter<TrashbinAdapter.MyViewHolder> {
     List<TrashbinFile> trashbinFile;
     Context context;
+    private OnItemListener mOnItemListener;
+    private PrettyTime pt = new PrettyTime();
 
-    public TrashbinAdapter(List<TrashbinFile> trashbinFile, Context ct) {
+    public TrashbinAdapter(List<TrashbinFile> trashbinFile, Context ct , OnItemListener onItemListener) {
         this.trashbinFile = trashbinFile;
         this.context = ct;
+        this.mOnItemListener = onItemListener;
     }
 
     @NonNull
@@ -28,7 +35,7 @@ public class TrashbinAdapter extends RecyclerView.Adapter<TrashbinAdapter.MyView
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.trashbin_list_layout , parent , false);
-        return new MyViewHolder(view);
+        return new MyViewHolder(view , mOnItemListener);
     }
 
     @Override
@@ -49,6 +56,7 @@ public class TrashbinAdapter extends RecyclerView.Adapter<TrashbinAdapter.MyView
         } else {
             holder.trashbinIcon.setImageResource(R.drawable.ic_baseline_folder_24);
         }
+        holder.time.setText(pt.format(new Date(trashbinFile.get(position).getTimestamp() * 1000)));
     }
 
     @Override
@@ -56,13 +64,26 @@ public class TrashbinAdapter extends RecyclerView.Adapter<TrashbinAdapter.MyView
         return trashbinFile.size();
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView trashbinIcon;
-        TextView trashbinPath;
-        public MyViewHolder(@NonNull View itemView) {
+        TextView trashbinPath , time;
+        OnItemListener onItemListener;
+        public MyViewHolder(@NonNull View itemView , OnItemListener onItemListener) {
             super(itemView);
+            time = itemView.findViewById(R.id.time);
             trashbinIcon = itemView.findViewById(R.id.trashbinIcon);
             trashbinPath = itemView.findViewById(R.id.trashbinPath);
+            this.onItemListener = onItemListener;
+            itemView.setOnClickListener(this);
         }
+
+        @Override
+        public void onClick(View v) {
+            onItemListener.OnItemClick(getAdapterPosition());
+        }
+    }
+
+    public interface OnItemListener {
+        void OnItemClick(int position);
     }
 }

@@ -11,6 +11,13 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.leydevelopment.sunibcloud.ui.Authentication;
+import com.leydevelopment.sunibcloud.ui.HistoryFragment;
+import com.leydevelopment.sunibcloud.ui.HomeFragment;
+import com.leydevelopment.sunibcloud.ui.SettingFragment;
+import com.leydevelopment.sunibcloud.ui.TaskFragment;
+import com.leydevelopment.sunibcloud.utils.BottomSheet;
+import com.leydevelopment.sunibcloud.utils.FileBottomDialog;
 
 import java.io.File;
 

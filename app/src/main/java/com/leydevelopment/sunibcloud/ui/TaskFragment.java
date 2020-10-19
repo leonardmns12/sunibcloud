@@ -1,4 +1,4 @@
-package com.leydevelopment.sunibcloud;
+package com.leydevelopment.sunibcloud.ui;
 
 import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
@@ -29,6 +29,9 @@ import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.firebase.storage.StorageReference;
+import com.leydevelopment.sunibcloud.utils.BottomSheet;
+import com.leydevelopment.sunibcloud.R;
+import com.leydevelopment.sunibcloud.adapter.FilesArrayAdapter;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.OwnCloudClientFactory;
 import com.owncloud.android.lib.common.OwnCloudCredentialsFactory;

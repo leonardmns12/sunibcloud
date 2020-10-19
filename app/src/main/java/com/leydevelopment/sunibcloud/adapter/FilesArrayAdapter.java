@@ -1,4 +1,4 @@
-package com.leydevelopment.sunibcloud;
+package com.leydevelopment.sunibcloud.adapter;
 
 import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
@@ -27,6 +27,8 @@ import android.widget.TextView;
 import androidx.collection.LruCache;
 
 import com.jakewharton.disklrucache.DiskLruCache;
+import com.leydevelopment.sunibcloud.BuildConfig;
+import com.leydevelopment.sunibcloud.R;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.OwnCloudBasicCredentials;
 import com.owncloud.android.lib.common.OwnCloudClient;
