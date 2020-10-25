@@ -53,6 +53,7 @@ public class RestoreTrashbinFileRemoteOperation extends RemoteOperation {
 
     private String sourcePath;
     private String fileName;
+    private String userId;
 
     /**
      * Constructor
@@ -60,9 +61,10 @@ public class RestoreTrashbinFileRemoteOperation extends RemoteOperation {
      * @param sourcePath Remote path of the {@link TrashbinFile} to restore
      * @param fileName   original filename
      */
-    public RestoreTrashbinFileRemoteOperation(String sourcePath, String fileName) {
+    public RestoreTrashbinFileRemoteOperation(String sourcePath, String fileName , String userId) {
         this.sourcePath = sourcePath;
         this.fileName = fileName;
+        this.userId = userId;
     }
 
     /**
@@ -77,9 +79,9 @@ public class RestoreTrashbinFileRemoteOperation extends RemoteOperation {
         RemoteOperationResult result;
         try {
             String source = client.getNewWebdavUri() + WebdavUtils.encodePath(sourcePath);
-            String target = client.getNewWebdavUri() + "/trashbin/" + client.getUserId() + "/restore/" +
+            String target = client.getNewWebdavUri() + "/trashbin/" + userId + "/restore/" +
                     Uri.encode(fileName);
-
+            Log.e("target" , target);
             move = new MoveMethod(source, target, true);
             int status = client.executeMethod(move, RESTORE_READ_TIMEOUT, RESTORE_CONNECTION_TIMEOUT);
 

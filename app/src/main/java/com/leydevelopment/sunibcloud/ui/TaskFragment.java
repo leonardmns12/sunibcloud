@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -29,9 +30,10 @@ import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.firebase.storage.StorageReference;
-import com.leydevelopment.sunibcloud.utils.BottomSheet;
 import com.leydevelopment.sunibcloud.R;
 import com.leydevelopment.sunibcloud.adapter.FilesArrayAdapter;
+import com.leydevelopment.sunibcloud.models.SharedPref;
+import com.leydevelopment.sunibcloud.utils.BottomSheet;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.OwnCloudClientFactory;
 import com.owncloud.android.lib.common.OwnCloudCredentialsFactory;
@@ -66,7 +68,7 @@ public class TaskFragment extends Fragment implements OnRemoteOperationListener,
     @SuppressLint("StaticFieldLeak")
     private static TextView extensionView;
     @SuppressLint("StaticFieldLeak")
-    private static TextView fileSizeView;
+    private static TextView fileSizeView , storageSize , usedSize;
     private static String extension;
     private static String fileSize;
     private static File uriFile;
@@ -79,6 +81,8 @@ public class TaskFragment extends Fragment implements OnRemoteOperationListener,
     NotificationCompat.Builder builder;
     private int PROGRESS_MAX = 100;
     private int PROGRESS_CURRENT = 0;
+    private String totalQuota, quotaUsed;
+    private Context mContext;
     public static void receiverMethod(String name , int size , File fileUri) {
         if (size < 1000000) {
             fileSize = Integer.toString(size) + " kb";
@@ -94,6 +98,7 @@ public class TaskFragment extends Fragment implements OnRemoteOperationListener,
         fileName.setText(name);
         extensionView.setText(extension);
         fileSizeView.setText(fileSize);
+
         uriFile = fileUri;
     }
     @Nullable
@@ -105,6 +110,8 @@ public class TaskFragment extends Fragment implements OnRemoteOperationListener,
         fileName = v.findViewById(R.id.fileName);
         extensionView   = v.findViewById(R.id.fileExt);
         fileSizeView    = v.findViewById(R.id.fileSize);
+        storageSize     = v.findViewById(R.id.storageSize);
+        usedSize        = v.findViewById(R.id.usedSize);
         buttonUpload    = v.findViewById(R.id.buttonUpload);
         filechoosen     = v.findViewById(R.id.fileChoosen);
         fileInfo        = v.findViewById(R.id.fileInfo);
@@ -122,6 +129,11 @@ public class TaskFragment extends Fragment implements OnRemoteOperationListener,
         Quota quota = new Quota();
         Long use = quota.free;
         Log.e("QUOTA" , Long.toString(use));
+        mContext = getContext();
+        totalQuota = getInfo("total_quota", mContext);
+        quotaUsed = getInfo( "used_quota",mContext);
+        usedSize.setText("used: " +quotaUsed);
+        storageSize.setText(totalQuota.substring(1));
         buttonOpenDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -143,6 +155,11 @@ public class TaskFragment extends Fragment implements OnRemoteOperationListener,
             }
         });
         return v;
+    }
+
+    private String getInfo(String shared_key, Context curr_context) {
+        SharedPref sf = new SharedPref(shared_key , curr_context);
+        return sf.getQuotaUsed();
     }
 
     private void fileUpload(File uriFile) {

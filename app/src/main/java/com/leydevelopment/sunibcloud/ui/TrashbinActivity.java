@@ -5,6 +5,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.SearchView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -12,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.leydevelopment.sunibcloud.R;
 import com.leydevelopment.sunibcloud.adapter.TrashbinAdapter;
+import com.leydevelopment.sunibcloud.utils.TrashbinDialog;
 import com.owncloud.android.lib.common.OwnCloudBasicCredentials;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.OwnCloudClientFactory;
@@ -32,7 +38,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class TrashbinActivity extends AppCompatActivity implements OnRemoteOperationListener , TrashbinAdapter.OnItemListener {
+public class TrashbinActivity extends AppCompatActivity implements OnRemoteOperationListener , TrashbinAdapter.OnItemListener, TrashbinDialog.TrashbinDialogListener {
     private Handler mHandler;
     private OwnCloudClient mClient;
     private OwnCloudBasicCredentials cred;
@@ -44,11 +50,13 @@ public class TrashbinActivity extends AppCompatActivity implements OnRemoteOpera
 
     String TRASHBIN_CACHE_KEY = "trashbin_";
     String path , keypath;
+    Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trashbin);
+        mContext = this;
         trashbinList = (RecyclerView) findViewById(R.id.trashbinList);
         List<TrashbinFile> listFile = null;
         TrashbinAdapter trashbinAdapter = new TrashbinAdapter(listFile,this , this);
@@ -67,6 +75,53 @@ public class TrashbinActivity extends AppCompatActivity implements OnRemoteOpera
             e.printStackTrace();
         }
         getTrashbin();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.trashbin_menu , menu);
+        MenuItem menuItem = menu.findItem(R.id.searchMenu);
+        MenuItem deleteAll = menu.findItem(R.id.deleteMenu);
+        ImageView deleteall = (ImageView) deleteAll.getActionView();
+        deleteall.setImageResource(R.drawable.ic_baseline_delete_24);
+        SearchView searchView = (SearchView) menuItem.getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                List<TrashbinFile> result = listFile;
+                List<TrashbinFile> newResult = new ArrayList<TrashbinFile>();
+                for (TrashbinFile x:result) {
+                    Log.e("res" , x.getFileName());
+                    if(x.getFileName().toLowerCase().contains(newText.toLowerCase())) {
+                        if (x.getRemotePath().equals("/")){
+                            continue;
+                        }else{
+                            newResult.add(x);
+                        }
+                    }
+                }
+                setAdapter(newResult);
+                return false;
+            }
+        });
+        deleteall.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.e("test" ,"Button delete pressed!");
+            }
+        });
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    private void setAdapter(List<TrashbinFile> mewRes) {
+        TrashbinAdapter trashbinAdapter = new TrashbinAdapter(mewRes,mContext , this);
+        trashbinList.setAdapter(trashbinAdapter);
+        trashbinList.setLayoutManager(new LinearLayoutManager(mContext));
     }
 
     private void getTrashbin() {
@@ -141,6 +196,9 @@ public class TrashbinActivity extends AppCompatActivity implements OnRemoteOpera
         if (listFile.get(position).getMimeType().equals("DIR")) {
             path = FileUtils.PATH_SEPARATOR + getFileName(listFile.get(position).getRemotePath());
             getTrashbin();
+        } else {
+            TrashbinDialog bottomDialog = new TrashbinDialog(this ,listFile.get(position).getRemotePath(),listFile.get(position).getFileName());
+            bottomDialog.show(getSupportFragmentManager(), "trashbindialog");
         }
     }
 
@@ -156,5 +214,11 @@ public class TrashbinActivity extends AppCompatActivity implements OnRemoteOpera
         }
         Filename = paths.substring(idx , paths.length());
         return Filename;
+    }
+
+    @Override
+    public void onActionTaken(String rpath) {
+        path = FileUtils.PATH_SEPARATOR;
+        getTrashbin();
     }
 }

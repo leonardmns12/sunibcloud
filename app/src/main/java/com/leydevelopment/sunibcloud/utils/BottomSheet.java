@@ -25,7 +25,6 @@ import androidx.core.content.ContextCompat;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.leydevelopment.sunibcloud.R;
-import com.leydevelopment.sunibcloud.utils.FileUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;

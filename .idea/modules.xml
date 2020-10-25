@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/My_Application.iml" filepath="$PROJECT_DIR$/.idea/modules/My_Application.iml" group="My_Application" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/app.iml" group="My Application/app" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/nextcloud-android-library/owncloud.iml" filepath="$PROJECT_DIR$/.idea/modules/nextcloud-android-library/owncloud.iml" group="My Application/owncloud" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/My_Application.iml" filepath="$PROJECT_DIR$/.idea/modules/My_Application.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/My_Application.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/My_Application.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/nextcloud-android-library/My_Application.owncloud.iml" filepath="$PROJECT_DIR$/.idea/modules/nextcloud-android-library/My_Application.owncloud.iml" />
     </modules>
   </component>
 </project>

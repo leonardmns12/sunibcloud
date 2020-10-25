@@ -23,7 +23,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="jar:file:/E:/Android%20Studio/plugins/android/lib/android.jar!/images/material/icons/materialicons/layers/baseline_layers_24.xml" />
+                                      <entry key="url" value="jar:file:/usr/local/android-studio/plugins/android/lib/android.jar!/images/material/icons/materialicons/restore/baseline_restore_24.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -34,8 +34,8 @@
                         <option name="values">
                           <map>
                             <entry key="color" value="29a9df" />
-                            <entry key="outputName" value="ic_baseline_layers_24" />
-                            <entry key="sourceFile" value="C:\Users\Jonz PC\AndroidStudioProjects\MyApplication2" />
+                            <entry key="outputName" value="ic_baseline_restore_24" />
+                            <entry key="sourceFile" value="$APPLICATION_HOME_DIR$/bin/C:\Users\Jonz PC\AndroidStudioProjects\MyApplication2" />
                           </map>
                         </option>
                       </PersistentState>
