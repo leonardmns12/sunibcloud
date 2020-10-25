@@ -98,7 +98,6 @@ public class TaskFragment extends Fragment implements OnRemoteOperationListener,
         fileName.setText(name);
         extensionView.setText(extension);
         fileSizeView.setText(fileSize);
-
         uriFile = fileUri;
     }
     @Nullable

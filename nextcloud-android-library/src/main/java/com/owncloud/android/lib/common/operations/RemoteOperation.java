@@ -22,8 +22,6 @@
  *
  */
 
-
-
 package com.owncloud.android.lib.common.operations;
 
 import android.accounts.Account;
@@ -402,7 +400,11 @@ public abstract class RemoteOperation implements Runnable {
             mListenerHandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    mListener.onRemoteOperationFinish(RemoteOperation.this, resultToSend);
+                    try {
+                        mListener.onRemoteOperationFinish(RemoteOperation.this, resultToSend);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             });
         }

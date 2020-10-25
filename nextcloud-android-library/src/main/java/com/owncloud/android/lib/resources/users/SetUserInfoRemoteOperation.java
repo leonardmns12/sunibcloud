@@ -33,7 +33,8 @@ import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.PutMethod;
 
 
-public class SetUserInfoRemoteOperation extends RemoteOperation {
+public class
+SetUserInfoRemoteOperation extends RemoteOperation {
 
     private static final String TAG = SetUserInfoRemoteOperation.class.getSimpleName();
 
@@ -49,7 +50,7 @@ public class SetUserInfoRemoteOperation extends RemoteOperation {
 
         private final String fieldName;
 
-        Field(String fieldName) {
+        private Field(String fieldName) {
             this.fieldName = fieldName;
         }
 

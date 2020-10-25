@@ -48,6 +48,12 @@ public class EmptyTrashbinRemoteOperation extends RemoteOperation {
     private static final int RESTORE_READ_TIMEOUT = 30000;
     private static final int RESTORE_CONNECTION_TIMEOUT = 5000;
 
+    private String uid;
+
+    public EmptyTrashbinRemoteOperation(String uid) {
+        this.uid = uid;
+    }
+
     /**
      * Performs the operation.
      *
@@ -59,7 +65,7 @@ public class EmptyTrashbinRemoteOperation extends RemoteOperation {
         DeleteMethod delete = null;
         RemoteOperationResult result;
         try {
-            delete = new DeleteMethod(client.getNewWebdavUri() + "/trashbin/" + client.getUserId() + "/trash");
+            delete = new DeleteMethod(client.getNewWebdavUri() + "/trashbin/" + uid + "/trash");
             int status = client.executeMethod(delete, RESTORE_READ_TIMEOUT, RESTORE_CONNECTION_TIMEOUT);
 
             result = new RemoteOperationResult(isSuccess(status), delete);

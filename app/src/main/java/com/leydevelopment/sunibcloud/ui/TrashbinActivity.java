@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -26,6 +27,7 @@ import com.owncloud.android.lib.common.operations.OnRemoteOperationListener;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.resources.files.FileUtils;
+import com.owncloud.android.lib.resources.trashbin.EmptyTrashbinRemoteOperation;
 import com.owncloud.android.lib.resources.trashbin.ReadTrashbinFolderRemoteOperation;
 import com.owncloud.android.lib.resources.trashbin.model.TrashbinFile;
 
@@ -112,10 +114,15 @@ public class TrashbinActivity extends AppCompatActivity implements OnRemoteOpera
         deleteall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.e("test" ,"Button delete pressed!");
+                emptyTrashbin();
             }
         });
         return super.onCreateOptionsMenu(menu);
+    }
+
+    private void emptyTrashbin() {
+        EmptyTrashbinRemoteOperation emptyTrashbin = new EmptyTrashbinRemoteOperation("leonard");
+        emptyTrashbin.execute(mClient , this , mHandler);
     }
 
     private void setAdapter(List<TrashbinFile> mewRes) {
@@ -137,7 +144,14 @@ public class TrashbinActivity extends AppCompatActivity implements OnRemoteOpera
     public void onRemoteOperationFinish(RemoteOperation caller, RemoteOperationResult result) {
         if (caller instanceof  ReadTrashbinFolderRemoteOperation) {
             OnSuccessfulReadTrashbin(caller , result);
+        } else if (caller instanceof  EmptyTrashbinRemoteOperation) {
+            OnSuccesfulEmptyTrashbin(caller, result);
         }
+    }
+
+    private void OnSuccesfulEmptyTrashbin(RemoteOperation caller, RemoteOperationResult result) {
+        Toast.makeText(this ,"Trashbin removed succesfuly!" , Toast.LENGTH_SHORT).show();
+        getTrashbin();
     }
 
     private void OnSuccessfulReadTrashbin(RemoteOperation caller, RemoteOperationResult result) {
@@ -151,6 +165,7 @@ public class TrashbinActivity extends AppCompatActivity implements OnRemoteOpera
             trashbinList.setLayoutManager(new LinearLayoutManager(this));
             createCachedFile(this , keypath ,listFile);
         }
+        Log.e("interface " , "test");
     }
 
     private void checkCached() throws IOException, ClassNotFoundException {
@@ -170,7 +185,6 @@ public class TrashbinActivity extends AppCompatActivity implements OnRemoteOpera
     }
 
     public static void createCachedFile (Context context, String key, List<TrashbinFile> fileName) {
-        Log.e("kp2" , key);
         try{
             for (TrashbinFile file : fileName) {
                 FileOutputStream fos = context.openFileOutput (key, Context.MODE_PRIVATE);
@@ -218,6 +232,7 @@ public class TrashbinActivity extends AppCompatActivity implements OnRemoteOpera
 
     @Override
     public void onActionTaken(String rpath) {
+        Log.e("rpath " , rpath);
         path = FileUtils.PATH_SEPARATOR;
         getTrashbin();
     }

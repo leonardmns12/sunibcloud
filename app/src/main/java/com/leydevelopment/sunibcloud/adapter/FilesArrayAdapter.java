@@ -29,6 +29,7 @@ import androidx.collection.LruCache;
 import com.jakewharton.disklrucache.DiskLruCache;
 import com.leydevelopment.sunibcloud.BuildConfig;
 import com.leydevelopment.sunibcloud.R;
+import com.leydevelopment.sunibcloud.models.CacheController;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.OwnCloudBasicCredentials;
 import com.owncloud.android.lib.common.OwnCloudClient;
@@ -49,6 +50,8 @@ import java.io.OutputStream;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import okhttp3.Cache;
+
 import static android.os.Environment.isExternalStorageRemovable;
 
 public class FilesArrayAdapter extends ArrayAdapter<RemoteFile> {
@@ -63,19 +66,11 @@ public class FilesArrayAdapter extends ArrayAdapter<RemoteFile> {
     private ViewHolder holder;
     private ImageView folder;
     private LruCache<String, Bitmap> memoryCache;
-
-    //disk cache
-    private DiskLruCache diskLruCache;
-    private final Object diskCacheLock = new Object();
-    private boolean diskCacheStarting = true;
-    private static final int DISK_CACHE_SIZE = 1024 * 1024 * 10; // 10MB
-    private static final String DISK_CACHE_SUBDIR = "thumbnails";
-
+    private CacheController cc;
     public static class ViewHolder {
 //        TextView textView;
 //        ImageView folder;
     }
-
     public FilesArrayAdapter(Context context, int resource) {
         super(context, resource);
     }
@@ -97,8 +92,10 @@ public class FilesArrayAdapter extends ArrayAdapter<RemoteFile> {
         folder = (ImageView) convertView.findViewById(R.id.folderImg);
 
         //cache
-        File cacheDir = getDiskCacheDir(mContext, DISK_CACHE_SUBDIR);
-        new InitDiskCacheTask().execute(cacheDir);
+//        File cacheDir = getDiskCacheDir(mContext, DISK_CACHE_SUBDIR);
+//        new InitDiskCacheTask().execute(cacheDir);
+        cc = new CacheController(getContext());
+        cc.addCache();
         //
 
         if ( getItem(position).getRemotePath().endsWith("/")) {
@@ -108,7 +105,7 @@ public class FilesArrayAdapter extends ArrayAdapter<RemoteFile> {
             return convertView;
         } else if ( getItem(position).getRemotePath().endsWith("png") || getItem(position).getRemotePath().endsWith("jpg") || getItem(position).getRemotePath().endsWith("jpeg")) {
             String key = getItem(res).getRemotePath();
-                Bitmap bp = getBitmapFromDiskCache(getItem(res).getRemotePath());
+                Bitmap bp = cc.getBitmapFromDiskCache(getItem(res).getRemotePath());
 
                 if(bp == null) {
                     FilesArrayAdapter.ThumbnailGenerationTask task = new ThumbnailGenerationTask();
@@ -142,23 +139,6 @@ public class FilesArrayAdapter extends ArrayAdapter<RemoteFile> {
         return convertView;
     }
 
-    class InitDiskCacheTask extends AsyncTask<File, Void, Void> {
-        @Override
-        protected Void doInBackground(File... params) {
-            synchronized (diskCacheLock) {
-                File cacheDir = params[0];
-                try {
-                    diskLruCache = DiskLruCache.open(cacheDir, 1 , 1 , DISK_CACHE_SIZE);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                diskCacheStarting = false; // Finished initialization
-                diskCacheLock.notifyAll(); // Wake any waiting threads
-            }
-            return null;
-        }
-    }
-
     public class ThumbnailGenerationTask extends AsyncTask<ThumbnailGenerationTask, Void , Bitmap> {
         @Override
         protected void onPreExecute() {
@@ -175,7 +155,8 @@ public class FilesArrayAdapter extends ArrayAdapter<RemoteFile> {
             Bitmap thumbnail = null;
             thumbnail = GenerateThumbnail();
             thumbnail = getRoundedCornerBitmap(thumbnail,20);
-            addBitmapToCache(getItem(res).getRemotePath(), thumbnail);
+            cc.addBitmapToCache(getItem(res).getRemotePath() , thumbnail);
+//            addBitmapToCache(getItem(res).getRemotePath(), thumbnail);
 //            folder.setImageBitmap(thumbnail);
             return thumbnail;
         }
@@ -250,106 +231,6 @@ public class FilesArrayAdapter extends ArrayAdapter<RemoteFile> {
 
         return output;
     }
-
-    public static File getDiskCacheDir(Context context, String uniqueName) {
-        // Check if media is mounted or storage is built-in, if so, try and use external cache dir
-        // otherwise use internal cache dir
-        final String cachePath =
-                Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState()) ||
-                        !isExternalStorageRemovable() ?
-                        context.getCacheDir().getPath() : null ;
-        return new File(cachePath + File.separator + uniqueName);
-    }
-
-    public void addBitmapToCache(String key, Bitmap bitmap) {
-        synchronized (diskCacheLock) {
-            if (diskLruCache != null && get(key) == null) {
-                put(key, bitmap);
-            }
-        }
-    }
-
-    public Bitmap getBitmapFromDiskCache(String key) {
-        synchronized (diskCacheLock) {
-            // Wait while disk cache is started from background thread
-            while (diskCacheStarting) {
-                try {
-                    diskCacheLock.wait();
-                } catch (InterruptedException e) {}
-            }
-            if (diskLruCache != null) {
-                return get(key);
-            }
-        }
-        return null;
-    }
-
-    private boolean writeBitmapToFile(Bitmap bitmap, DiskLruCache.Editor editor) throws IOException {
-        OutputStream out = null;
-        try {
-            out = new BufferedOutputStream(editor.newOutputStream(0), 8 * 1024);
-            return bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
-        } finally {
-            if (out != null) {
-                out.close();
-            }
-        }
-    }
-
-    public void put(String key, Bitmap bitmap) {
-        DiskLruCache.Editor editor = null;
-        String validKey = convertToValidKey(key);
-        try {
-            editor = diskLruCache.edit(validKey);
-            if (editor == null) {
-                return;
-            }
-            if (writeBitmapToFile(bitmap, editor)) {
-                diskLruCache.flush();
-                editor.commit();
-                if (BuildConfig.DEBUG) {
-                    Log_OC.d("CACHE_TEST_DISK", "image put on disk cache " + validKey);
-                }
-            } else {
-                editor.abort();
-                if (BuildConfig.DEBUG) {
-                    Log_OC.d("CACHE_TEST_DISK", "ERROR on: image put on disk cache " + validKey);
-                }
-            }
-        } catch (Exception e){
-            Log.e("ERR" , e.getMessage());
-        }
-    }
-
-    public Bitmap get(String key) {
-        Bitmap bitmap = null;
-        DiskLruCache.Snapshot snapshot = null;
-        String validKey = convertToValidKey(key);
-        try {
-            snapshot = diskLruCache.get(validKey);
-            if (snapshot == null) {
-                return null;
-            }
-            final InputStream in = snapshot.getInputStream(0);
-            if (in != null) {
-                final BufferedInputStream buffIn =
-                        new BufferedInputStream(in, 8 * 1024);
-                bitmap = BitmapFactory.decodeStream(buffIn);
-            }
-        } catch (IOException e){
-            Log.e("Err" , e.getMessage());
-        } finally {
-            if (snapshot != null) {
-                snapshot.close();
-            }
-        }
-        return bitmap;
-    }
-
-    private String convertToValidKey(String key) {
-        return Integer.toString(key.hashCode());
-    }
-
     private String getFileName(String paths) {
         String Filename = "";
         int idx = 0;

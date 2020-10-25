@@ -37,4 +37,6 @@
     <string name="move">Move</string>
     <string name="delete">Delete</string>
     <string name="rename">Rename</string>
+    <string name="address">Address</string>
+    <string name="save">Save</string>
 </resources>

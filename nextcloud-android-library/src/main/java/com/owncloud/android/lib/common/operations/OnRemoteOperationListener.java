@@ -25,8 +25,10 @@
 package com.owncloud.android.lib.common.operations;
 
 
+import java.io.IOException;
+
 public interface OnRemoteOperationListener {
 
-	void onRemoteOperationFinish(RemoteOperation caller, RemoteOperationResult result);
+	void onRemoteOperationFinish(RemoteOperation caller, RemoteOperationResult result) throws IOException;
 	
 }

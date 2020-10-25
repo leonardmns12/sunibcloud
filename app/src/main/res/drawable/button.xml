@@ -1,21 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<rotate xmlns:android="http://schemas.android.com/apk/res/android"
-    android:pivotX="50%"
-    android:pivotY="50%"
-    android:fromDegrees="0"
-    android:toDegrees="360">
-    <shape
-        android:shape="ring"
-        android:innerRadiusRatio="3"
-        android:thicknessRatio="8"
-        android:useLevel="false">
-
-        <size
-            android:width="76dip"
-            android:height="76dip" />
-
-        <solid android:color="@color/white"/>
-
-    </shape>
-
-</rotate>
+<shape android:shape="rectangle" xmlns:android="http://schemas.android.com/apk/res/android">
+        <corners android:radius="12dp"/>
+        <solid android:color="@color/bgred"/>
+</shape>
