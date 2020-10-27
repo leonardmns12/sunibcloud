@@ -2,16 +2,23 @@ package com.leydevelopment.sunibcloud;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.leydevelopment.sunibcloud.ui.Authentication;
+import com.leydevelopment.sunibcloud.ui.ConnectAccount;
 import com.leydevelopment.sunibcloud.ui.HistoryFragment;
 import com.leydevelopment.sunibcloud.ui.HomeFragment;
 import com.leydevelopment.sunibcloud.ui.SettingFragment;
@@ -23,12 +30,14 @@ import java.io.File;
 
 public class MainActivity extends AppCompatActivity implements  BottomSheet.BottomSheetListener , FileBottomDialog.FileDialogListner {
     private FirebaseAuth mAuth;
-
+    private FirebaseFirestore db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
+        checkCurrentUsers();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser == null) {
             Intent intent = new Intent(this , Authentication.class);
@@ -76,5 +85,24 @@ public class MainActivity extends AppCompatActivity implements  BottomSheet.Bott
         if(name.equals("Remove") || name.equals("Rename")){
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HistoryFragment()).commit();
         }
+    }
+
+    private void checkCurrentUsers() {
+        DocumentReference docRef = db.collection("users").document("+6281290404447");
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                    } else {
+                        Intent intent = new Intent(MainActivity.this, ConnectAccount.class);
+                        startActivity(intent);
+                    }
+                } else {
+                    Log.d("TAG", "get failed with ", task.getException());
+                }
+            }
+        });
     }
 }

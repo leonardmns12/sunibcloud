@@ -14,8 +14,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.chaos.view.PinView;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskExecutors;
 import com.google.firebase.FirebaseException;
@@ -27,11 +25,8 @@ import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.leydevelopment.sunibcloud.MainActivity;
 import com.leydevelopment.sunibcloud.R;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class OtpActivity extends AppCompatActivity {
@@ -125,26 +120,6 @@ public class OtpActivity extends AppCompatActivity {
                 });
     }
 
-    private void addNewUsers() {
-
-        Map<String, Object> user = new HashMap<>();
-        user.put("Completed Registration", false);
-        db.document("users/"+phoneNumb).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                Intent intent = new Intent(OtpActivity.this , TaskFragment.class);
-                startActivity(intent);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(OtpActivity.this , "Failed to connect to server!", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(OtpActivity.this , Login.class);
-                startActivity(intent);
-            }
-        });
-    }
-
     private void checkCurrentUsers() {
         DocumentReference docRef = db.collection("users").document(phoneNumb);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -154,10 +129,12 @@ public class OtpActivity extends AppCompatActivity {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         Log.d("TAG", "DocumentSnapshot data: " + document.getData());
-                        Intent intent = new Intent(OtpActivity.this , MainActivity.class);
+                        Intent intent = new Intent(OtpActivity.this , SuccessLogin.class);
+                        intent.putExtra("SUCCESS_ID" , "otp");
                         startActivity(intent);
                     } else {
-                       addNewUsers();
+                        Intent intent = new Intent(OtpActivity.this, ConnectAccount.class);
+                        startActivity(intent);
                     }
                 } else {
                     Log.d("TAG", "get failed with ", task.getException());

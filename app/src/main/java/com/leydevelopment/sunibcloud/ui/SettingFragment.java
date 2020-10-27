@@ -2,6 +2,7 @@ package com.leydevelopment.sunibcloud.ui;
 
 import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -21,6 +22,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.leydevelopment.sunibcloud.R;
 import com.leydevelopment.sunibcloud.models.CacheController;
 import com.owncloud.android.lib.common.OwnCloudAccount;
@@ -51,6 +53,7 @@ public class SettingFragment extends Fragment implements OnRemoteOperationListen
     private CacheController cc;
 
     private Bitmap cacheProfile;
+    private FirebaseAuth mAuth;
 
     private String uAddress;
 
@@ -72,6 +75,7 @@ public class SettingFragment extends Fragment implements OnRemoteOperationListen
             return fieldName;
         }
         private Field field;
+
     }
 
     @Nullable
@@ -86,6 +90,7 @@ public class SettingFragment extends Fragment implements OnRemoteOperationListen
         address     = (EditText) v.findViewById(R.id.address);
         saveBtn     = (Button) v.findViewById(R.id.confirmSave);
         mHandler = new Handler();
+        mAuth = FirebaseAuth.getInstance();
         Uri serverUri = Uri.parse("https://indofolks.com");
         cred = new OwnCloudBasicCredentials("leonard" , "gurame442");
         ocAccount = new OwnCloudAccount(serverUri , cred);
@@ -117,6 +122,9 @@ public class SettingFragment extends Fragment implements OnRemoteOperationListen
     private void saveInfo() {
 //        SetUserInfoRemoteOperation saveInfo = new SetUserInfoRemoteOperation("email" , "leonardmanoza@gmail.com" );
 //        saveInfo.execute(mClient, this , mHandler);
+        mAuth.signOut();
+        Intent intent = new Intent(getActivity() , Authentication.class);
+        startActivity(intent);
     }
 
     private void getRemoteAvatar() {

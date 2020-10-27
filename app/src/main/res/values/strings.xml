@@ -39,4 +39,8 @@
     <string name="rename">Rename</string>
     <string name="address">Address</string>
     <string name="save">Save</string>
+    <string name="firstlogin">Oops! No account connected to this number , Don\'t worry, you just need to
+    provided us your credential info, and we will automatically connecting to your account!
+    </string>
+    <string name="connect">Connect</string>
 </resources>
