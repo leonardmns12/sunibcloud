@@ -43,4 +43,5 @@
     provided us your credential info, and we will automatically connecting to your account!
     </string>
     <string name="connect">Connect</string>
+    <string name="personalChange">Credential info changes!</string>
 </resources>

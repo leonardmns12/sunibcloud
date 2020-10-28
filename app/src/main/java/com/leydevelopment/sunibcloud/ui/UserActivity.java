@@ -1,6 +1,7 @@
 package com.leydevelopment.sunibcloud.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.ybq.android.spinkit.sprite.Sprite;
 import com.github.ybq.android.spinkit.style.ThreeBounce;
+import com.leydevelopment.sunibcloud.MainActivity;
 import com.leydevelopment.sunibcloud.R;
 import com.leydevelopment.sunibcloud.adapter.ActivityAdapter;
 import com.owncloud.android.lib.common.OwnCloudClient;
@@ -46,6 +48,12 @@ public class UserActivity extends AppCompatActivity implements OnRemoteOperation
     private ConstraintLayout userLayout;
 
     private transient ObjectInputStream ois;
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this , MainActivity.class);
+        startActivity(intent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

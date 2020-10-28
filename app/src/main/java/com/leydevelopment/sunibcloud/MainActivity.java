@@ -21,20 +21,28 @@ import com.leydevelopment.sunibcloud.ui.Authentication;
 import com.leydevelopment.sunibcloud.ui.ConnectAccount;
 import com.leydevelopment.sunibcloud.ui.HistoryFragment;
 import com.leydevelopment.sunibcloud.ui.HomeFragment;
+import com.leydevelopment.sunibcloud.ui.NoNetwork;
 import com.leydevelopment.sunibcloud.ui.SettingFragment;
 import com.leydevelopment.sunibcloud.ui.TaskFragment;
 import com.leydevelopment.sunibcloud.utils.BottomSheet;
 import com.leydevelopment.sunibcloud.utils.FileBottomDialog;
+import com.leydevelopment.sunibcloud.utils.NetworkConnectivity;
 
 import java.io.File;
 
 public class MainActivity extends AppCompatActivity implements  BottomSheet.BottomSheetListener , FileBottomDialog.FileDialogListner {
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
+    private NetworkConnectivity nc = new NetworkConnectivity(this);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        if(!nc.getNetwork()) {
+            Intent intent = new Intent(this , NoNetwork.class);
+            startActivity(intent);
+            finish();
+        }
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         checkCurrentUsers();

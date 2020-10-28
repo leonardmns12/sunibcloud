@@ -21,7 +21,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.leydevelopment.sunibcloud.R;
 import com.owncloud.android.lib.common.OwnCloudBasicCredentials;
 import com.owncloud.android.lib.common.OwnCloudClient;
@@ -39,7 +42,7 @@ import java.util.Objects;
 
 
 public class HomeFragment extends Fragment implements OnRemoteOperationListener {
-    private FirebaseAuth mAuth;
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private static Context mContext;
     private org.apache.commons.httpclient.methods.GetMethod getMethod;
     private OwnCloudBasicCredentials cred;
@@ -50,15 +53,19 @@ public class HomeFragment extends Fragment implements OnRemoteOperationListener 
 
     private ImageView iconMsg;
 
+    private String username , password;
+
     private TextView quotaUsed , totalQuota , greetingMsg;
 
-    private CardView homeUser , trashBin;
+    private CardView homeUser , trashBin , whatsnew;
 
     private Handler mHandler;
     private float usedQuota , freeQuota , quota;
 
     public final String USED_QUOTA_KEY = "used_quota";
     public final String TOTAL_QUOTA_KEY = "total_quota";
+
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Nullable
     @Override
@@ -73,28 +80,17 @@ public class HomeFragment extends Fragment implements OnRemoteOperationListener 
         iconMsg = (ImageView) v.findViewById(R.id.iconMsg);
         homeUser = (CardView) v.findViewById(R.id.homeUser);
         trashBin = (CardView) v.findViewById(R.id.trashBin);
+        whatsnew = (CardView) v.findViewById(R.id.whatsnew);
         getGreetingMsg();
         readData(TOTAL_QUOTA_KEY);
         readData(USED_QUOTA_KEY);
-        Uri serverUri = Uri.parse("https://indofolks.com");
-        mClient = OwnCloudClientFactory.createOwnCloudClient(serverUri, getActivity(), true);
-        mClient.setCredentials(OwnCloudCredentialsFactory.newBasicCredentials("leonard", "gurame442"));
-        mHandler = new Handler();
-        userInfo();
-
-        logoutBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FirebaseAuth.getInstance().signOut();
-                Intent intent = new Intent(getActivity() , Authentication.class);
-                startActivity(intent);
-            }
-        });
+        readCredential();
         homeUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity() , UserActivity.class);
                 startActivity(intent);
+                getActivity().finish();
             }
         });
         trashBin.setOnClickListener(new View.OnClickListener() {
@@ -102,9 +98,33 @@ public class HomeFragment extends Fragment implements OnRemoteOperationListener 
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity() , TrashbinActivity.class);
                 startActivity(intent);
+                getActivity().finish();
+            }
+        });
+        whatsnew.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity() , Information.class);
+                startActivity(intent);
+                getActivity().finish();
             }
         });
         return v;
+    }
+
+    private void readCredential() {
+        db.document("users/" + mAuth.getCurrentUser().getPhoneNumber()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                username = documentSnapshot.get("username").toString();
+                password = documentSnapshot.get("password").toString();
+                Uri serverUri = Uri.parse("https://indofolks.com");
+                mClient = OwnCloudClientFactory.createOwnCloudClient(serverUri, getActivity(), true);
+                mClient.setCredentials(OwnCloudCredentialsFactory.newBasicCredentials(username, password));
+                mHandler = new Handler();
+                userInfo();
+            }
+        });
     }
 
     @SuppressLint("SetTextI18n")
@@ -133,8 +153,15 @@ public class HomeFragment extends Fragment implements OnRemoteOperationListener 
 
     @Override
     public void onRemoteOperationFinish(RemoteOperation caller, RemoteOperationResult result) {
-        if (caller instanceof GetUserInfoRemoteOperation) {
-            onSuccessfulGetInfo(caller, result);
+
+        if(result.getHttpCode() == 401){
+            Intent intent = new Intent(getActivity() , PersonalChanges.class);
+            startActivity(intent);
+            getActivity().finish();
+        }else {
+            if (caller instanceof GetUserInfoRemoteOperation) {
+                onSuccessfulGetInfo(caller, result);
+            }
         }
     }
 

@@ -1,6 +1,7 @@
 package com.leydevelopment.sunibcloud.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -16,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.leydevelopment.sunibcloud.MainActivity;
 import com.leydevelopment.sunibcloud.R;
 import com.leydevelopment.sunibcloud.adapter.TrashbinAdapter;
 import com.leydevelopment.sunibcloud.utils.TrashbinDialog;
@@ -53,6 +55,12 @@ public class TrashbinActivity extends AppCompatActivity implements OnRemoteOpera
     String TRASHBIN_CACHE_KEY = "trashbin_";
     String path , keypath;
     Context mContext;
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this , MainActivity.class);
+        startActivity(intent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

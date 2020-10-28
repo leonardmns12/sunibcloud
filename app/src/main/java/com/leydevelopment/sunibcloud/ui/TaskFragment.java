@@ -238,7 +238,6 @@ public class TaskFragment extends Fragment implements OnRemoteOperationListener,
 
     @Override
     public void onRemoteOperationFinish(RemoteOperation caller, RemoteOperationResult result) {
-        Toast.makeText(getActivity(), String.valueOf(result.getHttpCode()), Toast.LENGTH_SHORT).show();
         if (!result.isSuccess()) {
             Log.e("TAG", "Err : " + result.getLogMessage(), result.getException());
             Toast.makeText(getActivity() , "Error while uploading files!" , Toast.LENGTH_LONG).show();

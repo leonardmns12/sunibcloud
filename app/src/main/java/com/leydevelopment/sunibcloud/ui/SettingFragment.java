@@ -24,7 +24,6 @@ import androidx.fragment.app.Fragment;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.leydevelopment.sunibcloud.R;
-import com.leydevelopment.sunibcloud.models.CacheController;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.OwnCloudBasicCredentials;
 import com.owncloud.android.lib.common.OwnCloudClient;
@@ -50,7 +49,6 @@ public class SettingFragment extends Fragment implements OnRemoteOperationListen
     private TextView displayName;
     private EditText email , address;
     private Button saveBtn;
-    private CacheController cc;
 
     private Bitmap cacheProfile;
     private FirebaseAuth mAuth;
@@ -109,10 +107,6 @@ public class SettingFragment extends Fragment implements OnRemoteOperationListen
                 saveInfo();
             }
         });
-        cc = new CacheController(getContext());
-        cc.addCache();
-        cacheProfile = cc.getBitmapFromDiskCache("avatar");
-        avatar.setImageBitmap(cacheProfile);
 
         getRemoteAvatar();
         getUserInfo();
@@ -165,7 +159,6 @@ public class SettingFragment extends Fragment implements OnRemoteOperationListen
         byte[] bitmapdata = r.getAvatarData();
         Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapdata, 0, bitmapdata.length);
         avatar.setImageBitmap(bitmap);
-        cc.addBitmapToCache("avatar" , bitmap);
         }
 
     }

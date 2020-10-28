@@ -227,6 +227,7 @@
 
         </androidx.cardview.widget.CardView>
         <androidx.cardview.widget.CardView
+            android:id="@+id/whatsnew"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:cardCornerRadius="5dp"
@@ -256,7 +257,7 @@
                     android:layout_marginTop="5dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Tutorial"
+                    android:text="What's new"
                     android:fontFamily="@font/reguler"/>
             </LinearLayout>
 
