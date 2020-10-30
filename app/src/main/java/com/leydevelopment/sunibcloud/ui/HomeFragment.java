@@ -153,9 +153,12 @@ public class HomeFragment extends Fragment implements OnRemoteOperationListener 
 
     @Override
     public void onRemoteOperationFinish(RemoteOperation caller, RemoteOperationResult result) {
-
         if(result.getHttpCode() == 401){
             Intent intent = new Intent(getActivity() , PersonalChanges.class);
+            startActivity(intent);
+            getActivity().finish();
+        }else if (result.getHttpCode() == 503) {
+            Intent intent = new Intent(getActivity() , Maintenance.class);
             startActivity(intent);
             getActivity().finish();
         }else {

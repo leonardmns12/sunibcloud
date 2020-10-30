@@ -25,7 +25,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup">
-        <activity android:name=".ui.PersonalChanges"></activity>
+        <activity android:name=".ui.Maintenance"></activity>
+        <activity android:name=".ui.PersonalChanges" />
         <activity android:name=".ui.NoNetwork" />
         <activity android:name=".ui.ViewInformation" />
         <activity android:name=".ui.Information" />

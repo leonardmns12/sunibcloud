@@ -24,6 +24,7 @@ import androidx.fragment.app.Fragment;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.leydevelopment.sunibcloud.R;
+import com.leydevelopment.sunibcloud.models.CacheController;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.OwnCloudBasicCredentials;
 import com.owncloud.android.lib.common.OwnCloudClient;
@@ -47,8 +48,9 @@ public class SettingFragment extends Fragment implements OnRemoteOperationListen
     private OwnCloudBasicCredentials cred;
     private OwnCloudAccount ocAccount;
     private TextView displayName;
-    private EditText email , address;
+    private EditText email , address, phoneNumber;
     private Button saveBtn;
+    private CacheController cc;
 
     private Bitmap cacheProfile;
     private FirebaseAuth mAuth;
@@ -87,11 +89,14 @@ public class SettingFragment extends Fragment implements OnRemoteOperationListen
         email       = (EditText) v.findViewById(R.id.email);
         address     = (EditText) v.findViewById(R.id.address);
         saveBtn     = (Button) v.findViewById(R.id.confirmSave);
+        phoneNumber = (EditText) v.findViewById(R.id.phoneNumber);
+        cc = new CacheController(getActivity());
         mHandler = new Handler();
         mAuth = FirebaseAuth.getInstance();
         Uri serverUri = Uri.parse("https://indofolks.com");
         cred = new OwnCloudBasicCredentials("leonard" , "gurame442");
         ocAccount = new OwnCloudAccount(serverUri , cred);
+        phoneNumber.setText(mAuth.getCurrentUser().getPhoneNumber());
         try {
             mClient = OwnCloudClientManagerFactory.getDefaultSingleton().getClientFor(ocAccount , getContext());
         } catch (OperationCanceledException e) {
@@ -147,7 +152,7 @@ public class SettingFragment extends Fragment implements OnRemoteOperationListen
         email.setText(uinfo.email);
         displayName.setText(uinfo.displayName);
         if (uinfo.address != null) {
-            address.setText("Test");
+            address.setText(uinfo.address);
         } else {
             address.setText("No address");
         }
@@ -158,7 +163,7 @@ public class SettingFragment extends Fragment implements OnRemoteOperationListen
         ArrayList<Object> data = result.getData();
         byte[] bitmapdata = r.getAvatarData();
         Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapdata, 0, bitmapdata.length);
-        avatar.setImageBitmap(bitmap);
+        avatar.setImageBitmap(cc.getRoundedCornerBitmap(bitmap , 200));
         }
 
     }

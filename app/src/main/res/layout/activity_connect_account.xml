@@ -75,7 +75,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/button"
         android:fontFamily="@font/reguler"
-        android:text="@string/connect"
+        android:text="@string/okkay"
         android:textAllCaps="false"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"

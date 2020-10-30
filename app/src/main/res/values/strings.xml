@@ -44,4 +44,8 @@
     </string>
     <string name="connect">Connect</string>
     <string name="personalChange">Credential info changes!</string>
+    <string name="maintenance">Under Maintenance</string>
+    <string name="maintenance_title">Server currently maintenance, Don\'t worry our best team already handle it and we\'ll be ready soon!</string>
+    <string name="okkay">Okkay!</string>
+    <string name="signout">Sign out</string>
 </resources>

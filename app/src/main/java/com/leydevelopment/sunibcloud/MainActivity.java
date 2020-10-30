@@ -87,14 +87,14 @@ public class MainActivity extends AppCompatActivity implements  BottomSheet.Bott
         int color;
 
         if(isConnected) {
-            message = "You are online...";
+            message = "You are connected...";
             color = Color.WHITE;
         } else {
             message = "You are offline...";
             color = Color.RED;
         }
 
-        Snackbar snackbar = Snackbar.make(findViewById(R.id.RL) , message , Snackbar.LENGTH_LONG);
+        Snackbar snackbar = Snackbar.make(findViewById(R.id.RL) , message , Snackbar.LENGTH_SHORT);
         View view = snackbar.getView();
         TextView textView = view.findViewById(com.google.android.material.R.id.snackbar_text);
         textView.setTextColor(color);

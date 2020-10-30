@@ -201,14 +201,6 @@ public class FilesArrayAdapter extends ArrayAdapter<RemoteFile> {
         return thumbnail;
     }
 
-    private Bitmap handlePNG(Bitmap bitmap, int pxW, int pxH) {
-        Bitmap resultBitmap = Bitmap.createBitmap(pxW, pxH, Bitmap.Config.ARGB_8888);
-        Canvas c = new Canvas(resultBitmap);
-        // TODO check based on https://github.com/nextcloud/android/pull/3459#discussion_r339935975
-        c.drawColor(mContext.getResources().getColor(R.color.red));
-        c.drawBitmap(bitmap, 0, 0, null);
-        return resultBitmap;
-    }
 
     public static Bitmap getRoundedCornerBitmap(Bitmap bitmap, int pixels) {
         Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap
@@ -231,6 +223,16 @@ public class FilesArrayAdapter extends ArrayAdapter<RemoteFile> {
 
         return output;
     }
+
+    private Bitmap handlePNG(Bitmap bitmap, int pxW, int pxH) {
+        Bitmap resultBitmap = Bitmap.createBitmap(pxW, pxH, Bitmap.Config.ARGB_8888);
+        Canvas c = new Canvas(resultBitmap);
+        // TODO check based on https://github.com/nextcloud/android/pull/3459#discussion_r339935975
+        c.drawColor(mContext.getResources().getColor(R.color.red));
+        c.drawBitmap(bitmap, 0, 0, null);
+        return resultBitmap;
+    }
+
     private String getFileName(String paths) {
         String Filename = "";
         int idx = 0;
