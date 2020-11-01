@@ -42,6 +42,7 @@ import java.io.File;
 public class MainActivity extends AppCompatActivity implements  BottomSheet.BottomSheetListener , FileBottomDialog.FileDialogListner , NetworkConnectivity.NetworkConnectivityListener {
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
+    private String connectionFailed;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,22 +84,28 @@ public class MainActivity extends AppCompatActivity implements  BottomSheet.Bott
     }
 
     private void showSnackbar(boolean isConnected) {
-        String message;
-        int color;
+        try{
+            if(getIntent().getExtras().getBoolean("connectionFailed")){
+                String message;
+                int color;
 
-        if(isConnected) {
-            message = "You are connected...";
-            color = Color.WHITE;
-        } else {
-            message = "You are offline...";
-            color = Color.RED;
+                if(isConnected) {
+                    message = "You are connected...";
+                    color = Color.WHITE;
+                } else {
+                    message = "You are offline...";
+                    color = Color.RED;
+                }
+
+                Snackbar snackbar = Snackbar.make(findViewById(R.id.RL) , message , Snackbar.LENGTH_SHORT);
+                View view = snackbar.getView();
+                TextView textView = view.findViewById(com.google.android.material.R.id.snackbar_text);
+                textView.setTextColor(color);
+                snackbar.show();
+            }
+        } catch (Exception e){
+            e.printStackTrace();
         }
-
-        Snackbar snackbar = Snackbar.make(findViewById(R.id.RL) , message , Snackbar.LENGTH_SHORT);
-        View view = snackbar.getView();
-        TextView textView = view.findViewById(com.google.android.material.R.id.snackbar_text);
-        textView.setTextColor(color);
-        snackbar.show();
     }
 
     @Override

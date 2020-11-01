@@ -24,6 +24,7 @@ public class NoNetwork extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(NoNetwork.this , MainActivity.class);
+                intent.putExtra("connectionFailed" , true);
                 startActivity(intent);
                 finish();
             }

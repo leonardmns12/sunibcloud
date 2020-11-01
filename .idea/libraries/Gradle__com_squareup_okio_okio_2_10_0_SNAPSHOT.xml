@@ -1,13 +1,13 @@
 <component name="libraryTable">
   <library name="Gradle: com.squareup.okio:okio:2.10.0-SNAPSHOT">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.squareup.okio/okio/2.10.0-SNAPSHOT/ea090cab21b89bbcc20be6f7687e8f21eb6cfdef/okio-2.10.0-SNAPSHOT.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.squareup.okio/okio/2.10.0-SNAPSHOT/3bc7f2ce88d0f2032e6416bf90f471585e50421a/okio-2.10.0-SNAPSHOT.jar!/" />
     </CLASSES>
     <JAVADOC>
-      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.squareup.okio/okio/2.10.0-SNAPSHOT/64db4c5baf4d6bba3c1313e89d5a1c51bbc9f74a/okio-2.10.0-SNAPSHOT-javadoc.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.squareup.okio/okio/2.10.0-SNAPSHOT/31c73f7cf638dd35d336e0207ed610ce902bbbdd/okio-2.10.0-SNAPSHOT-javadoc.jar!/" />
     </JAVADOC>
     <SOURCES>
-      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.squareup.okio/okio/2.10.0-SNAPSHOT/2ed963f26570dae40612ff9ddc22c636bd57b20c/okio-2.10.0-SNAPSHOT-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.squareup.okio/okio/2.10.0-SNAPSHOT/14d983433ce3f731dd171ac9bd1fa2c2059ec8c5/okio-2.10.0-SNAPSHOT-sources.jar!/" />
     </SOURCES>
   </library>
 </component>
