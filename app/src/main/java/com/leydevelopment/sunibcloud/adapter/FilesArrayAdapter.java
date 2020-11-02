@@ -30,6 +30,7 @@ import com.jakewharton.disklrucache.DiskLruCache;
 import com.leydevelopment.sunibcloud.BuildConfig;
 import com.leydevelopment.sunibcloud.R;
 import com.leydevelopment.sunibcloud.models.CacheController;
+import com.leydevelopment.sunibcloud.models.ThumbnailManager;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.OwnCloudBasicCredentials;
 import com.owncloud.android.lib.common.OwnCloudClient;
@@ -90,6 +91,18 @@ public class FilesArrayAdapter extends ArrayAdapter<RemoteFile> {
         Filename.setText(getFileName(getItem(position).getRemotePath()));
         textView.setText(getItem(position).getRemotePath());
         folder = (ImageView) convertView.findViewById(R.id.folderImg);
+        Uri serverUri = Uri.parse("https://indofolks.com");
+        cred = new OwnCloudBasicCredentials("leonard" , "gurame442");
+        OwnCloudAccount ocAccount = new OwnCloudAccount(serverUri , cred);
+        try {
+            mClient = OwnCloudClientManagerFactory.getDefaultSingleton().getClientFor(ocAccount , getContext());
+        } catch (OperationCanceledException e) {
+            e.printStackTrace();
+        } catch (AuthenticatorException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         //cache
 //        File cacheDir = getDiskCacheDir(mContext, DISK_CACHE_SUBDIR);
@@ -106,11 +119,10 @@ public class FilesArrayAdapter extends ArrayAdapter<RemoteFile> {
         } else if ( getItem(position).getRemotePath().endsWith("png") || getItem(position).getRemotePath().endsWith("jpg") || getItem(position).getRemotePath().endsWith("jpeg")) {
             String key = getItem(res).getRemotePath();
                 Bitmap bp = cc.getBitmapFromDiskCache(getItem(res).getRemotePath());
-
                 if(bp == null) {
-                    FilesArrayAdapter.ThumbnailGenerationTask task = new ThumbnailGenerationTask();
+                    ThumbnailManager tm = new ThumbnailManager(mClient , getItem(res).getRemotePath(), "api" , getContext());
                     try {
-                        bp = task.execute().get();
+                        bp = tm.ThumbnailTask();
                         folder.setImageBitmap(bp);
                     } catch (ExecutionException e) {
                         e.printStackTrace();
@@ -138,101 +150,6 @@ public class FilesArrayAdapter extends ArrayAdapter<RemoteFile> {
 
         return convertView;
     }
-
-    public class ThumbnailGenerationTask extends AsyncTask<ThumbnailGenerationTask, Void , Bitmap> {
-        @Override
-        protected void onPreExecute() {
-            return;
-        }
-
-        @Override
-        protected void onPostExecute(Bitmap bitmap) {
-        }
-
-        @SuppressLint("WrongThread")
-        @Override
-        protected Bitmap doInBackground(ThumbnailGenerationTask... thumbnailGenerationTasks) {
-            Bitmap thumbnail = null;
-            thumbnail = GenerateThumbnail();
-            thumbnail = getRoundedCornerBitmap(thumbnail,20);
-            cc.addBitmapToCache(getItem(res).getRemotePath() , thumbnail);
-//            addBitmapToCache(getItem(res).getRemotePath(), thumbnail);
-//            folder.setImageBitmap(thumbnail);
-            return thumbnail;
-        }
-    }
-
-    private Bitmap GenerateThumbnail() {
-        Bitmap thumbnail = null;
-        try {
-            Uri serverUri = Uri.parse("https://indofolks.com");
-            String filePath = getItem(res).getRemotePath();
-            if (filePath.contains(" ")) {
-                filePath = filePath.replaceAll("\\s" , "%20");
-            }
-            String uriPhoto = "https://indofolks.com/index.php/apps/files/api/v1/thumbnail/150/150/" + filePath;
-            cred = new OwnCloudBasicCredentials("leonard" , "gurame442");
-            OwnCloudAccount ocAccount = new OwnCloudAccount(serverUri , cred);
-            mClient = OwnCloudClientManagerFactory.getDefaultSingleton().getClientFor(ocAccount , getContext());
-            getMethod = new GetMethod(uriPhoto);
-            getMethod.setRequestHeader("Cookie",
-                    "nc_sameSiteCookielax=true;nc_sameSiteCookiestrict=true");
-
-            getMethod.setRequestHeader(RemoteOperation.OCS_API_HEADER,
-                    RemoteOperation.OCS_API_HEADER_VALUE);
-            Log_OC.d("TAG", "generate thumbnail: " + "capture.png" + " URI: " + uriPhoto);
-            int status = mClient.executeMethod(getMethod);
-            if (status == HttpStatus.SC_OK) {
-                Log.e("TEST" , "FINISH");
-                InputStream inputStream = getMethod.getResponseBodyAsStream();
-                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-                thumbnail = ThumbnailUtils.extractThumbnail(bitmap, 150, 150);
-            } else {
-                mClient.exhaustResponse(getMethod.getResponseBodyAsStream());
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (OperationCanceledException e) {
-            e.printStackTrace();
-        } catch (AuthenticatorException e) {
-            e.printStackTrace();
-        }
-        return thumbnail;
-    }
-
-
-    public static Bitmap getRoundedCornerBitmap(Bitmap bitmap, int pixels) {
-        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap
-                .getHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(output);
-
-        final int color = 0xff424242;
-        final Paint paint = new Paint();
-        final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
-        final RectF rectF = new RectF(rect);
-        final float roundPx = pixels;
-
-        paint.setAntiAlias(true);
-        canvas.drawARGB(0, 0, 0, 0);
-        paint.setColor(color);
-        canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
-
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
-        canvas.drawBitmap(bitmap, rect, rect, paint);
-
-        return output;
-    }
-
-    private Bitmap handlePNG(Bitmap bitmap, int pxW, int pxH) {
-        Bitmap resultBitmap = Bitmap.createBitmap(pxW, pxH, Bitmap.Config.ARGB_8888);
-        Canvas c = new Canvas(resultBitmap);
-        // TODO check based on https://github.com/nextcloud/android/pull/3459#discussion_r339935975
-        c.drawColor(mContext.getResources().getColor(R.color.red));
-        c.drawBitmap(bitmap, 0, 0, null);
-        return resultBitmap;
-    }
-
     private String getFileName(String paths) {
         String Filename = "";
         int idx = 0;

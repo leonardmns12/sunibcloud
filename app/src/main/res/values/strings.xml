@@ -48,4 +48,5 @@
     <string name="maintenance_title">Server currently maintenance, Don\'t worry our best team already handle it and we\'ll be ready soon!</string>
     <string name="okkay">Okkay!</string>
     <string name="signout">Sign out</string>
+    <string name="previewimg">Preview Image</string>
 </resources>

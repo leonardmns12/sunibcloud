@@ -18,13 +18,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
@@ -60,7 +60,7 @@ public class TaskFragment extends Fragment implements OnRemoteOperationListener,
     @SuppressLint("StaticFieldLeak")
     private static Button buttonUpload;
     @SuppressLint("StaticFieldLeak")
-    private static TableLayout fileInfo;
+    private static CardView fileInfo;
     private StorageReference mStorage;
     //fileInfoString
     @SuppressLint("StaticFieldLeak")
@@ -95,9 +95,9 @@ public class TaskFragment extends Fragment implements OnRemoteOperationListener,
         buttonUpload.setVisibility(View.VISIBLE);
         fileInfo.setVisibility(View.VISIBLE);
         filename = name;
-        fileName.setText(name);
-        extensionView.setText(extension);
-        fileSizeView.setText(fileSize);
+        fileName.setText("Filename : " +name);
+        extensionView.setText("Extension : " +extension);
+        fileSizeView.setText("Size : " +fileSize);
         uriFile = fileUri;
     }
     @Nullable
@@ -187,7 +187,6 @@ public class TaskFragment extends Fragment implements OnRemoteOperationListener,
             builder.setProgress(PROGRESS_MAX, PROGRESS_CURRENT, false);
             notificationManager.notify(0, builder.build());
 
-
             Long timeStampLong = uriFile.lastModified() / 1000;
             String timeStamp = timeStampLong.toString();
             String remotePath = FileUtils.PATH_SEPARATOR + uriFile.getName();
@@ -195,6 +194,7 @@ public class TaskFragment extends Fragment implements OnRemoteOperationListener,
                 remotePath = remotePath.replaceAll("\\s" , "%20");
             }
             String mimeType = "image/png";
+            Log.e("LOc" , uriFile.getAbsolutePath());
             UploadFileRemoteOperation uploadOperation = new UploadFileRemoteOperation(uriFile.getAbsolutePath(), remotePath, mimeType, timeStamp);
             uploadOperation.addDataTransferProgressListener(this);
             uploadOperation.execute(client, this , handler);
@@ -221,8 +221,9 @@ public class TaskFragment extends Fragment implements OnRemoteOperationListener,
 
     @Override
     public void onTransferProgress(long progressRate, long totalTransferredSoFar, long totalToTransfer, String fileAbsoluteName) {
-        Log.e("Tag" , "MASUK");
         final long percentage = (totalToTransfer > 0 ? totalTransferredSoFar * 100 / totalToTransfer : 0);
+        Log.e("Tag" , Long.toString(totalTransferredSoFar) + "/" +Long.toString(totalToTransfer));
+        Log.e("Percenetage" , Long.toString(percentage));
         handler.post(new Runnable() {
             @Override
             public void run() {
@@ -239,6 +240,7 @@ public class TaskFragment extends Fragment implements OnRemoteOperationListener,
     @Override
     public void onRemoteOperationFinish(RemoteOperation caller, RemoteOperationResult result) {
         if (!result.isSuccess()) {
+            result.getLogMessage();
             Log.e("TAG", "Err : " + result.getLogMessage(), result.getException());
             Toast.makeText(getActivity() , "Error while uploading files!" , Toast.LENGTH_LONG).show();
             pb.setVisibility(View.GONE);
@@ -246,7 +248,7 @@ public class TaskFragment extends Fragment implements OnRemoteOperationListener,
             progressView.setText("");
             pb.setProgress(0);
         } else if (caller instanceof UploadFileRemoteOperation) {
-            onSuccessfulUpload((UploadFileRemoteOperation) caller , result);
+            onSuccessfulUpload((UploadFileRemoteOperation) caller, result);
         }
     }
 

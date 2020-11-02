@@ -80,12 +80,11 @@
         android:fontFamily="@font/bold"
         android:textSize="18dp"/>
 
-    <TableLayout
+    <androidx.cardview.widget.CardView
         android:id="@+id/fileInfo"
         android:visibility="visible"
         android:layout_width="275dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/laptop"
         android:padding="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -93,20 +92,25 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.731">
 
+        <LinearLayout
+            android:padding="30dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+
         <TextView
             android:id="@+id/fileName"
-            android:layout_width="25dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginBottom="10dp"
             android:fontFamily="@font/bold"
-            android:textColor="@color/white"
+            android:textColor="@color/primary"
             android:textSize="12sp"
             tools:layout_editor_absoluteX="59dp"
             tools:layout_editor_absoluteY="284dp"
-            android:maxLength="15"
             />
-
         <TextView
             android:id="@+id/fileSize"
             android:layout_width="wrap_content"
@@ -114,7 +118,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginBottom="10dp"
             android:fontFamily="@font/bold"
-            android:textColor="@color/white"
+            android:textColor="@color/primary"
             android:textSize="12sp"
             tools:layout_editor_absoluteX="59dp"
             tools:layout_editor_absoluteY="284dp" />
@@ -126,12 +130,14 @@
             android:layout_marginLeft="10dp"
             android:layout_marginBottom="10dp"
             android:fontFamily="@font/bold"
-            android:textColor="@color/white"
+            android:textColor="@color/primary"
             android:textSize="12sp"
             tools:layout_editor_absoluteX="59dp"
             tools:layout_editor_absoluteY="284dp" />
 
-    </TableLayout>
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
 
     <Button
         android:id="@+id/buttonUpload"
@@ -143,7 +149,7 @@
         android:text="@string/upload"
         android:textAllCaps="false"
         android:textColor="@color/white"
-        android:textSize="18sp"
+        android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"

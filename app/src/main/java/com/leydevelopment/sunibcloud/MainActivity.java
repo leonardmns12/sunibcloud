@@ -63,8 +63,6 @@ public class MainActivity extends AppCompatActivity implements  BottomSheet.Bott
                 bottomNav.setOnNavigationItemSelectedListener(navListener);
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
             }
-            else {
-            }
         }
     }
 

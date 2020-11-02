@@ -198,6 +198,11 @@ public class HistoryFragment extends Fragment implements OnRemoteOperationListen
     }
 
     private void checkCached() throws IOException, ClassNotFoundException {
+        if (path.contains("/")) {
+            cachePath = path.replaceAll("/" , "%10");
+        } else {
+            cachePath = path;
+        }
         List<RemoteFile> apkCacheList = (ArrayList<RemoteFile>)readCachedFile  (Objects.requireNonNull(getContext()), cachePath);
         if(apkCacheList == null) {
             Log.e("Cache " , "Cache null");

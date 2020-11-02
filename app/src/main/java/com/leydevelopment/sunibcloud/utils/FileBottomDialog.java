@@ -25,6 +25,7 @@ import androidx.core.app.NotificationManagerCompat;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.leydevelopment.sunibcloud.R;
+import com.leydevelopment.sunibcloud.ui.PreviewImage;
 import com.leydevelopment.sunibcloud.ui.TaskFragment;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.OwnCloudClientFactory;
@@ -41,7 +42,7 @@ import java.io.File;
 
 public class FileBottomDialog extends BottomSheetDialogFragment implements OnRemoteOperationListener , OnDatatransferProgressListener {
     private static final String CHANNEL_ID = "23";
-    private LinearLayout downloadBtn , copyBtn , moveBtn , deleteBtn , renameBtn , actionMenu , renameMenu;
+    private LinearLayout downloadBtn , copyBtn , moveBtn , deleteBtn , renameBtn , actionMenu , renameMenu , previewImage;
 
     private String path;
 
@@ -71,17 +72,21 @@ public class FileBottomDialog extends BottomSheetDialogFragment implements OnRem
         Uri serverUri = Uri.parse("https://indofolks.com");
         mClient = OwnCloudClientFactory.createOwnCloudClient(serverUri, getActivity(), true);
         mClient.setCredentials(OwnCloudCredentialsFactory.newBasicCredentials("leonard", "gurame442"));
-        downloadBtn = (LinearLayout) v.findViewById(R.id.downloadBtn);
-        copyBtn = (LinearLayout) v.findViewById(R.id.copyBtn);
-        moveBtn = (LinearLayout) v.findViewById(R.id.moveBtn);
-        deleteBtn = (LinearLayout) v.findViewById(R.id.deleteBtn);
-        renameBtn = (LinearLayout) v.findViewById(R.id.renameBtn);
-        actionMenu = (LinearLayout) v.findViewById(R.id.actionMenu);
-        renameMenu = (LinearLayout) v.findViewById(R.id.renameMenu);
-        submitRename = (Button) v.findViewById(R.id.submitRename);
+        downloadBtn     = (LinearLayout) v.findViewById(R.id.downloadBtn);
+        copyBtn         = (LinearLayout) v.findViewById(R.id.copyBtn);
+        moveBtn         = (LinearLayout) v.findViewById(R.id.moveBtn);
+        deleteBtn       = (LinearLayout) v.findViewById(R.id.deleteBtn);
+        renameBtn       = (LinearLayout) v.findViewById(R.id.renameBtn);
+        actionMenu      = (LinearLayout) v.findViewById(R.id.actionMenu);
+        renameMenu      = (LinearLayout) v.findViewById(R.id.renameMenu);
+        previewImage    = (LinearLayout) v.findViewById(R.id.previewImage);
+        submitRename    = (Button) v.findViewById(R.id.submitRename);
         rename = (EditText) v.findViewById(R.id.rename);
         if(IsFolder.equals("true")) {
             downloadBtn.setVisibility(View.GONE);
+        }
+        if(path.endsWith("png") || path.endsWith("jpg") || path.endsWith("jpeg")){
+            previewImage.setVisibility(View.VISIBLE);
         }
         downloadBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -127,6 +132,14 @@ public class FileBottomDialog extends BottomSheetDialogFragment implements OnRem
             public void onClick(View v) {
                 startRename(path);
                 dismiss();
+            }
+        });
+        previewImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity() , PreviewImage.class);
+                intent.putExtra("path" , path);
+                startActivity(intent);
             }
         });
         return v;
